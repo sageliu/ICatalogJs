@@ -2,7 +2,7 @@
  * @Author: fuwei
  * @Date:   2017-09-08 13:14:47
  * @Last Modified by:   fuwei
- * @Last Modified time: 2017-09-08 18:21:07
+ * @Last Modified time: 2017-09-08 18:36:41
  */
 var catalog = function($) {
     var _config = {
@@ -22,6 +22,7 @@ var catalog = function($) {
 
     var _initCatalog = function() {
         var hList = _config.dom.find('h1,h2,h3,h4,h5');
+        if(hList.length===0)return;
         var catJson = [];
         $.each(hList, function(index, value) {
             var obj = {};
