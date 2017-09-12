@@ -121,9 +121,9 @@ var catalog = function($) {
             catali.append(cata);
             ul.append(catali);
         });
- 
-        div.height(catJson.length * 21);
- 
+
+        div.height(catJson.length * 30);
+
         div.append(ul);
         return div;
     }
@@ -137,20 +137,24 @@ var catalog = function($) {
     var _bindMove = function(dom) {
 
         var $dom = $(dom);
- 
+
         var isMove = false;
         $dom.on('mousedown', function(event) {
             event.preventDefault();
             $dom.addClass('mock');
- 
-            initPos.x = $dom[0].offsetLeft;
-            initPos.y = $dom[0].offsetTop;
-            if (!pos.x || !pos.y) {
-                pos.x = event.pageX;
-                pos.y = event.pageY;
+            if (_isOverRange(event, $dom)) {
+                initPos.x = $dom[0].offsetLeft;
+                initPos.y = $dom[0].offsetTop;
+                if (!pos.x || !pos.y) {
+                    pos.x = event.pageX;
+                    pos.y = event.pageY;
+                }
+                isMove = true;
+            } else {
+                isMove = false;
             }
- 
-            isMove = true;
+
+
         }).on('mouseup', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -159,9 +163,9 @@ var catalog = function($) {
         }).on('mousemove', function(event) {
             event.preventDefault();
             /* Act on the event */
- 
+
             if (isMove) {
-                if (event.pageX > $dom[0].offsetLeft && event.pageX < $dom[0].offsetLeft + $dom.width()) {
+                if (_isOverRange(event, $dom)) {
 
                     $dom.css({
                         "left": event.pageX - pos.x + initPos.x,
@@ -174,10 +178,15 @@ var catalog = function($) {
             } else {
                 pos.x = event.pageX;
                 pos.y = event.pageY;
- 
+
             }
 
-        });
+        }).on('mouseleave', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $dom.removeClass('mock');
+            isMove = false;
+        });;
 
     }
 
@@ -185,12 +194,17 @@ var catalog = function($) {
 
     }
 
- 
+
     var _getDirection = function(c, o) {
         return c > o ? -1 : 1;
     }
 
- 
+
+    var _isOverRange = function(event, dom) {
+        // body...
+        return event.pageX > dom[0].offsetLeft && event.pageX < dom[0].offsetLeft + dom.width()
+    }
+
 
     return {
         init: _init
