@@ -17,12 +17,13 @@ var catalog = function($) {
         catjson = _initCatalogIndex(catjson);
         var divDom = _initDom(catjson);
         $("body").append(divDom);
+        _bindMove(divDom);
         console.log(catalog);
     }
 
     var _initCatalog = function() {
         var hList = _config.dom.find('h1,h2,h3,h4,h5');
-        if(hList.length===0)return;
+        if (hList.length === 0) return;
         var catJson = [];
         $.each(hList, function(index, value) {
             var obj = {};
@@ -103,6 +104,8 @@ var catalog = function($) {
     }
 
     var _initDom = function(catJson) {
+        var controlDiv = $('<div class="cot-close"><a href="javascript:void(0);">x</a></div>');
+        // var listDiv = $('<div class="cot-"><a href="javascript:void(0);">x</a></div>');
         var div = $("<div></div>").addClass('catalogContainer');
         var ul = $("<ul></ul>");
 
@@ -116,6 +119,7 @@ var catalog = function($) {
             catali.append(cata);
             ul.append(catali);
         });
+        div.height(catJson.length * 30);
         div.append(ul);
         return div;
     }
@@ -123,6 +127,44 @@ var catalog = function($) {
     var _getMaxTilte = function(obj) {
 
         return;
+    }
+
+
+    var _bindMove = function(dom) {
+
+        var $dom = $(dom);
+        var isMove = false;
+        $dom.on('mousedown', function(event) {
+            event.preventDefault();
+            $dom.addClass('mock');
+            isMove = true;
+        }).on('mouseup', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $dom.removeClass('mock');
+            isMove = false;
+        }).on('mousemove', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+
+            if (isMove) {
+
+                setTimeout(function() {
+                    $dom.css({
+                        "left": event.clientX - $dom.width() / 2,
+                        "top": event.clientY - $dom.height() / 2
+                    });
+                },1);
+
+
+            }
+
+        });
+
+    }
+
+    var _expandNode = function() {
+
     }
 
 
