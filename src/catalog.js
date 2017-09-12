@@ -2,13 +2,15 @@
  * @Author: fuwei
  * @Date:   2017-09-08 13:14:47
  * @Last Modified by:   fuwei
- * @Last Modified time: 2017-09-08 18:36:41
+ * @Last Modified time: 2017-09-12 20:41:47
  */
 var catalog = function($) {
     var _config = {
         dom: $("article"),
         splitChar: "."
     }
+    var pos = {};
+    var initPos = {};
     var _init = function(config) {
         if (!!config) {
             $.extend(true, _config, config);
@@ -119,7 +121,9 @@ var catalog = function($) {
             catali.append(cata);
             ul.append(catali);
         });
-        div.height(catJson.length * 30);
+ 
+        div.height(catJson.length * 21);
+ 
         div.append(ul);
         return div;
     }
@@ -133,10 +137,19 @@ var catalog = function($) {
     var _bindMove = function(dom) {
 
         var $dom = $(dom);
+ 
         var isMove = false;
         $dom.on('mousedown', function(event) {
             event.preventDefault();
             $dom.addClass('mock');
+ 
+            initPos.x = $dom[0].offsetLeft;
+            initPos.y = $dom[0].offsetTop;
+            if (!pos.x || !pos.y) {
+                pos.x = event.pageX;
+                pos.y = event.pageY;
+            }
+ 
             isMove = true;
         }).on('mouseup', function(event) {
             event.preventDefault();
@@ -146,17 +159,22 @@ var catalog = function($) {
         }).on('mousemove', function(event) {
             event.preventDefault();
             /* Act on the event */
-
+ 
             if (isMove) {
+                if (event.pageX > $dom[0].offsetLeft && event.pageX < $dom[0].offsetLeft + $dom.width()) {
 
-                setTimeout(function() {
                     $dom.css({
-                        "left": event.clientX - $dom.width() / 2,
-                        "top": event.clientY - $dom.height() / 2
+                        "left": event.pageX - pos.x + initPos.x,
+                        "top": event.pageY - pos.y + initPos.y
                     });
-                },1);
+
+                }
 
 
+            } else {
+                pos.x = event.pageX;
+                pos.y = event.pageY;
+ 
             }
 
         });
@@ -167,6 +185,12 @@ var catalog = function($) {
 
     }
 
+ 
+    var _getDirection = function(c, o) {
+        return c > o ? -1 : 1;
+    }
+
+ 
 
     return {
         init: _init
