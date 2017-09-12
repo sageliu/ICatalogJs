@@ -2,7 +2,7 @@
  * @Author: fuwei
  * @Date:   2017-09-08 13:14:47
  * @Last Modified by:   fuwei
- * @Last Modified time: 2017-09-12 20:32:39
+ * @Last Modified time: 2017-09-12 20:41:47
  */
 var catalog = function($) {
     var _config = {
@@ -157,13 +157,15 @@ var catalog = function($) {
             event.preventDefault();
             /* Act on the event */
             if (isMove) {
-                setTimeout(function() {
+                if (event.pageX > $dom[0].offsetLeft && event.pageX < $dom[0].offsetLeft + $dom.width()) {
+
                     $dom.css({
                         "left": event.pageX - pos.x + initPos.x,
                         "top": event.pageY - pos.y + initPos.y
                     });
 
-                }, 10);
+                }
+
 
             } else {
                 pos.x = event.pageX;
