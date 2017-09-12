@@ -2,13 +2,15 @@
  * @Author: fuwei
  * @Date:   2017-09-08 13:14:47
  * @Last Modified by:   fuwei
- * @Last Modified time: 2017-09-08 18:36:41
+ * @Last Modified time: 2017-09-12 20:32:39
  */
 var catalog = function($) {
     var _config = {
         dom: $("article"),
         splitChar: "."
     }
+    var pos = {};
+    var initPos = {};
     var _init = function(config) {
         if (!!config) {
             $.extend(true, _config, config);
@@ -17,12 +19,13 @@ var catalog = function($) {
         catjson = _initCatalogIndex(catjson);
         var divDom = _initDom(catjson);
         $("body").append(divDom);
+        _bindMove(divDom);
         console.log(catalog);
     }
 
     var _initCatalog = function() {
         var hList = _config.dom.find('h1,h2,h3,h4,h5');
-        if(hList.length===0)return;
+        if (hList.length === 0) return;
         var catJson = [];
         $.each(hList, function(index, value) {
             var obj = {};
@@ -103,6 +106,8 @@ var catalog = function($) {
     }
 
     var _initDom = function(catJson) {
+        var controlDiv = $('<div class="cot-close"><a href="javascript:void(0);">x</a></div>');
+        // var listDiv = $('<div class="cot-"><a href="javascript:void(0);">x</a></div>');
         var div = $("<div></div>").addClass('catalogContainer');
         var ul = $("<ul></ul>");
 
@@ -116,6 +121,7 @@ var catalog = function($) {
             catali.append(cata);
             ul.append(catali);
         });
+        div.height(catJson.length * 21);
         div.append(ul);
         return div;
     }
@@ -123,6 +129,57 @@ var catalog = function($) {
     var _getMaxTilte = function(obj) {
 
         return;
+    }
+
+
+    var _bindMove = function(dom) {
+
+        var $dom = $(dom);
+        console.log($dom);
+
+        var isMove = false;
+        $dom.on('mousedown', function(event) {
+            event.preventDefault();
+            $dom.addClass('mock');
+            initPos.x = $dom[0].offsetLeft;
+            initPos.y = $dom[0].offsetTop;
+            if (!pos.x || !pos.y) {
+                pos.x = event.pageX;
+                pos.y = event.pageY;
+            }
+            isMove = true;
+        }).on('mouseup', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            $dom.removeClass('mock');
+            isMove = false;
+        }).on('mousemove', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            if (isMove) {
+                setTimeout(function() {
+                    $dom.css({
+                        "left": event.pageX - pos.x + initPos.x,
+                        "top": event.pageY - pos.y + initPos.y
+                    });
+
+                }, 10);
+
+            } else {
+                pos.x = event.pageX;
+                pos.y = event.pageY;
+            }
+
+        });
+
+    }
+
+    var _expandNode = function() {
+
+    }
+
+    var _getDirection = function(c, o) {
+        return c > o ? -1 : 1;
     }
 
 
