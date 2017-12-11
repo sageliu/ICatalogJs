@@ -18,29 +18,35 @@
     /*overflow-y:scroll;*/
     overflow-x: hidden;
 }
+.catalogContainer:hover{
+    box-shadow: 1px;
+    background: #bfbfbf;
+    cursor: move !important;
+}
+.catalogContainer a:hover{
+    cursor: pointer !important;
+    color: blue;
+}
+.mock {
+    box-shadow: 1px;
+    background: #bfbfbf;
+    cursor: move;
+}
 
-.mock {
-    box-shadow: 1px;
-    background: #bfbfbf;
-    cursor: move;
-}
-.mock {
-    box-shadow: 1px;
-    background: #bfbfbf;
-    cursor: move;
-}
 .catalogContainer ul {
     list-style-type: none;
-    width: 220px;
+    // width: 220px;
     overflow: hidden;
     padding-left: 10px;
 }
 
 .item {
-    width: 200px;
+    /* width: 200px; */
     padding: 2px;
     overflow: hidden;
+    text-overflow: ellipsis;
     height: 20px;
+    white-space: nowrap;
 }
 
 .item a {
